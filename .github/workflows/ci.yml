@@ -43,5 +43,8 @@ jobs:
       - name: Migrasi dan seeder dari basis data kosong
         run: php artisan migrate:fresh --seed --force
 
+      - name: Buku besar seimbang
+        run: php artisan lapak:periksa-buku
+
       - name: Pengujian
         run: ./vendor/bin/pest --ci
