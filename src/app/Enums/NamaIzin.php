@@ -12,6 +12,7 @@ enum NamaIzin: string
 {
     case KeranjangKelola = 'keranjang.kelola';
     case TokoBuka = 'toko.buka';
+    case PesananBuat = 'pesanan.buat';
     case ProdukKelola = 'produk.kelola';
     case DompetLihat = 'dompet.lihat';
     case TokoModerasi = 'toko.moderasi';
@@ -23,6 +24,7 @@ enum NamaIzin: string
         return match ($this) {
             self::KeranjangKelola => 'Mengisi dan mengubah keranjang belanja sendiri',
             self::TokoBuka => 'Mengajukan pembukaan toko',
+            self::PesananBuat => 'Mengelola alamat kirim, checkout, dan melihat pesanan sendiri',
             self::ProdukKelola => 'Menambah, mengubah, dan mengarsipkan produk toko sendiri',
             self::DompetLihat => 'Melihat saldo dan mutasi dompet sendiri',
             self::TokoModerasi => 'Menyetujui dan menangguhkan toko',

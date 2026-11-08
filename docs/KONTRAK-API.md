@@ -87,7 +87,7 @@ Kunci diperoleh dari `POST /api/v1/masuk`. Simpan kunci di tempat yang aman; ser
 
 | Peran | Izin |
 | --- | --- |
-| `pembeli` | `keranjang.kelola`, `toko.buka` |
+| `pembeli` | `keranjang.kelola`, `toko.buka`, `pesanan.buat` |
 | `penjual` | `produk.kelola`, `dompet.lihat` |
 | `admin` | `toko.moderasi`, `peran.kelola` |
 | `keuangan` | `buku-besar.lihat` |

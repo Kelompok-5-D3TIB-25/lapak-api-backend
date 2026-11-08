@@ -34,7 +34,7 @@ enum NamaPeran: string
     public function izinBawaan(): array
     {
         return match ($this) {
-            self::Pembeli => [NamaIzin::KeranjangKelola, NamaIzin::TokoBuka],
+            self::Pembeli => [NamaIzin::KeranjangKelola, NamaIzin::TokoBuka, NamaIzin::PesananBuat],
             self::Penjual => [NamaIzin::ProdukKelola, NamaIzin::DompetLihat],
             self::Admin => [NamaIzin::TokoModerasi, NamaIzin::PeranKelola],
             self::Keuangan => [NamaIzin::BukuBesarLihat],
