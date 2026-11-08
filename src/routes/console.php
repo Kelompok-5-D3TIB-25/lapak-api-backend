@@ -10,3 +10,5 @@ Artisan::command('inspire', function () {
 
 // Sesi yang sudah lama mati dibuang setiap dini hari.
 Schedule::command('lapak:pangkas-sesi')->dailyAt('03:15');
+
+// Commands registered via bootstrap/app.php ->withCommands() (Laravel 11 style). See bootstrap/app.php.
