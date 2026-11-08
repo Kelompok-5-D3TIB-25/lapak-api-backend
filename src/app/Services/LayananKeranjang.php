@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Domain\Belanja\ButirBermasalah;
 use App\Domain\Belanja\RincianToko;
+use App\Exceptions\GalatDomain;
 use App\Models\ButirKeranjang;
 use App\Models\Keranjang;
 use App\Models\Pengguna;
@@ -34,6 +35,50 @@ final class LayananKeranjang
             ->values()
             ->all();
 
-        return $this->penyusun->pilah($butir);
+        return $this->penyusun->pilah($butir, $pengguna);
+    }
+
+    /**
+     * Menetapkan kuantitas sebuah produk MENJADI angka tertentu, bukan menambahkannya.
+     * Permintaan yang sama dikirim dua kali menghasilkan keranjang yang sama.
+     */
+    public function aturButir(Pengguna $pengguna, int $produkId, int $kuantitas): void
+    {
+        // Versi tegas: melempar LP-4 atau LP-5 sebelum apa pun ditulis.
+        $this->penyusun->susun([['produk_id' => $produkId, 'kuantitas' => $kuantitas]], $pengguna);
+
+        $keranjang = $this->milik($pengguna);
+        $sudahAda = $keranjang->butir()->where('produk_id', $produkId)->exists();
+
+        if (! $sudahAda && $keranjang->butir()->count() >= config('lapak.belanja.butir_maksimum')) {
+            throw new GalatDomain('KERANJANG_PENUH', 'Keranjang sudah penuh.', 422);
+        }
+
+        $keranjang->butir()->updateOrCreate(['produk_id' => $produkId], ['kuantitas' => $kuantitas]);
+    }
+
+    /** Menghapus butir yang tidak ada bukan galat: hasil akhirnya sama, butir itu tidak ada. */
+    public function hapusButir(Pengguna $pengguna, int $produkId): void
+    {
+        $this->milik($pengguna)->butir()->where('produk_id', $produkId)->delete();
+    }
+
+    public function kosongkan(Pengguna $pengguna): void
+    {
+        $this->milik($pengguna)->butir()->delete();
+    }
+
+    /** Keranjang SELALU dicari lewat pengguna sesi. Tidak ada jalan menuju keranjang lewat id. */
+    private function milik(Pengguna $pengguna): Keranjang
+    {
+        $keranjang = Keranjang::query()->where('pengguna_id', $pengguna->id)->first();
+
+        if ($keranjang === null) {
+            $keranjang = new Keranjang;
+            $keranjang->pengguna_id = $pengguna->id;
+            $keranjang->save();
+        }
+
+        return $keranjang;
     }
 }

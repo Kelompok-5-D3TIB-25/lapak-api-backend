@@ -11,6 +11,7 @@ use App\Domain\Belanja\PenghitungBelanja;
 use App\Domain\Belanja\RincianToko;
 use App\Domain\Uang;
 use App\Exceptions\ProdukTidakDapatDibeli;
+use App\Models\Pengguna;
 use App\Models\Produk;
 
 /**
@@ -24,9 +25,10 @@ final class PenyusunBelanja
      * Dipakai keranjang: isi keranjang bisa menjadi basi, dan membukanya tidak boleh gagal.
      *
      * @param  list<array{produk_id: int, kuantitas: int}>  $butir
+     * @param  Pengguna|null  $pembeli  bila diisi, produk dari toko miliknya ikut ditandai (LP-5)
      * @return array{0: list<RincianToko>, 1: list<ButirBermasalah>}
      */
-    public function pilah(array $butir): array
+    public function pilah(array $butir, ?Pengguna $pembeli = null): array
     {
         $diminta = collect($butir)->pluck('kuantitas', 'produk_id');
 
@@ -47,6 +49,14 @@ final class PenyusunBelanja
             if ($barang === null) {
                 $bermasalah[] = new ButirBermasalah(
                     $produkId, $kuantitas, AlasanBermasalah::TidakTersedia,
+                );
+
+                continue;
+            }
+
+            if ($pembeli !== null && $barang->dimilikiOleh($pembeli)) {
+                $bermasalah[] = new ButirBermasalah(
+                    $produkId, $kuantitas, AlasanBermasalah::ProdukSendiri, $barang->nama,
                 );
 
                 continue;
@@ -87,9 +97,9 @@ final class PenyusunBelanja
      * @param  list<array{produk_id: int, kuantitas: int}>  $butir
      * @return list<RincianToko>
      */
-    public function susun(array $butir): array
+    public function susun(array $butir, ?Pengguna $pembeli = null): array
     {
-        [$rincian, $bermasalah] = $this->pilah($butir);
+        [$rincian, $bermasalah] = $this->pilah($butir, $pembeli);
 
         $hilang = [];
         foreach ($bermasalah as $masalah) {
@@ -102,6 +112,12 @@ final class PenyusunBelanja
         }
 
         foreach ($bermasalah as $masalah) {
+            if ($masalah->alasan === AlasanBermasalah::ProdukSendiri) {
+                throw ProdukTidakDapatDibeli::milikSendiri(
+                    $masalah->produkId, (string) $masalah->namaProduk,
+                );
+            }
+
             throw ProdukTidakDapatDibeli::stokKurang(
                 $masalah->produkId,
                 (string) $masalah->namaProduk,
