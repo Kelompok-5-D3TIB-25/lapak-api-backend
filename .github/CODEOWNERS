@@ -49,3 +49,22 @@
 /src/database/migrations/*_4000*.php                @nabelazahra-ptr26
 /src/database/migrations/*_5000*.php                @Rokkett2500
 /src/database/seeders/DatabaseSeeder.php            @Rokkett2500
+
+# Sesi 2 — berkas baru
+/src/app/Models/Sesi.php                          @ihsanpradipta45-alt
+/src/app/Services/PenerbitSesi.php                @ihsanpradipta45-alt
+/src/app/Services/PemeriksaSesi.php               @ihsanpradipta45-alt
+/src/app/Services/PemeriksaKataSandi.php          @ihsanpradipta45-alt
+/src/app/Http/Controllers/MasukController.php     @ihsanpradipta45-alt
+/src/app/Http/Controllers/SesiController.php      @ihsanpradipta45-alt
+/src/app/Http/Controllers/TokoSayaController.php  @victor-isMe
+/src/app/Http/Controllers/ProdukSayaController.php @victor-isMe
+/src/app/Services/LayananKeranjang.php            @mrdaknsh
+/src/app/Http/Controllers/KeranjangController.php @mrdaknsh
+/src/app/Http/Controllers/DompetController.php    @nabelazahra-ptr26
+/src/routes/api/dompet.php                        @nabelazahra-ptr26
+/src/routes/console.php                           @Rokkett2500
+/src/tests/TestCase.php                           @Rokkett2500
+/src/tests/Pest.php                               @Rokkett2500
+/src/app/Console/Commands/PangkasSesi.php         @Rokkett2500
+/src/app/Domain/Sesi/                             @ihsanpradipta45-alt
