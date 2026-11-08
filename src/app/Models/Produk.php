@@ -45,6 +45,13 @@ final class Produk extends Model
         return $this->belongsTo(Kategori::class, 'kategori_id');
     }
 
+    /** Syarat yang sama dengan scopeTampil, untuk baris yang sudah di tangan beserta tokonya. */
+    public function sedangTampil(): bool
+    {
+        return $this->status === StatusProduk::Aktif
+            && $this->toko->status === StatusToko::Aktif;
+    }
+
     /** Dipakai LP-5. Relasi toko harus sudah dimuat; mode ketat menolak pemuatan malas. */
     public function dimilikiOleh(Pengguna $pengguna): bool
     {
