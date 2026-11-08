@@ -22,6 +22,11 @@ final class PenggunaResource extends JsonResource
             'surel' => $this->surel,
             'telepon' => $this->telepon,
             'status' => $this->status->value,
+            // Hanya ikut bila relasinya sudah dimuat pemanggil. Resource tidak memicu kueri sendiri.
+            'peran' => $this->whenLoaded(
+                'peran',
+                fn () => $this->peran->pluck('nama')->sort()->values()->all(),
+            ),
             'terdaftar_pada' => $this->created_at?->toIso8601String(),
         ];
     }
