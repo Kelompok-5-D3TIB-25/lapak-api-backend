@@ -35,7 +35,7 @@ final class Alamat extends Model
     /**
      * Seluruh pintu alamat berangkat dari scope ini. Nomor alamat milik orang lain dijawab 404.
      *
-     * @param Builder<Alamat> $kueri
+     * @param  Builder<Alamat>  $kueri
      */
     public function scopeMilik(Builder $kueri, Pengguna $pengguna): void
     {
