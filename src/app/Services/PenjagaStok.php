@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\PenyesuaianStokDitolak;
 use App\Exceptions\ProdukTidakDapatDibeli;
 use App\Models\Produk;
 use Illuminate\Support\Collection;
@@ -18,6 +19,9 @@ use LogicException;
  */
 final class PenjagaStok
 {
+    /** Batas atas stok. Melindungi luapan aritmetika saat harga dikali kuantitas. */
+    public const MAKSIMUM = 100_000;
+
     /**
      * Produk yang akan dibeli, beserta tokonya, berkunci nomor produk. Barisnya DIKUNCI sampai
      * transaksi pemanggil selesai.
@@ -65,6 +69,43 @@ final class PenjagaStok
 
         $produk->stok -= $kuantitas;
         $produk->save();
+    }
+
+    /**
+     * Dipakai penjual. Perubahannya RELATIF ("tambah 5"), tidak pernah mutlak ("jadikan 15").
+     * Angka yang dilihat penjual di layarnya mungkin sudah usang ketika ia menekan simpan, dan
+     * kunci baris tidak dapat melindungi pembacaan yang terjadi di layar orang.
+     *
+     * @throws PenyesuaianStokDitolak 409 LP-4 bila hasilnya negatif atau melewati batas
+     */
+    public function sesuaikan(int $idProduk, int $selisih): Produk
+    {
+        if ($selisih === 0) {
+            throw new InvalidArgumentException('Selisih tidak boleh nol.');
+        }
+
+        return DB::transaction(function () use ($idProduk, $selisih): Produk {
+            // Baris yang sama dengan yang dikunci ambil(): penjual dan pembeli saling menunggu.
+            $produk = Produk::query()->lockForUpdate()->findOrFail($idProduk);
+            $baru = $produk->stok + $selisih;
+
+            if ($baru < 0) {
+                throw PenyesuaianStokDitolak::akanNegatif(
+                    $produk->id, $produk->nama, $produk->stok, $selisih,
+                );
+            }
+
+            if ($baru > self::MAKSIMUM) {
+                throw PenyesuaianStokDitolak::melewatiBatas(
+                    $produk->id, $produk->nama, $produk->stok, self::MAKSIMUM,
+                );
+            }
+
+            $produk->stok = $baru;
+            $produk->save();
+
+            return $produk;
+        });
     }
 
     /** Dipakai pembatalan. Menambah tidak memerlukan keputusan, maka cukup satu UPDATE. */

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enums\StatusProduk;
+use App\Http\Requests\PenyesuaianStokRequest;
 use App\Http\Requests\ProdukSayaRequest;
 use App\Http\Resources\ProdukSayaResource;
 use App\Models\Produk;
 use App\Models\Toko;
+use App\Services\PenjagaStok;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -38,6 +40,19 @@ final class ProdukSayaController extends Controller
         $produk->save();
 
         return $this->sukses(ProdukSayaResource::make($produk->refresh()), 201);
+    }
+
+    /**
+     * Penjual menyebut selisih, bukan angka akhir. Produk tetap dicari melalui toko miliknya,
+     * lalu PenjagaStok membaca ulang barisnya di bawah kunci sebelum menghitung.
+     */
+    public function stok(PenyesuaianStokRequest $request, PenjagaStok $stok, int $id): JsonResponse
+    {
+        $produk = $this->produkSaya($request, $id);
+
+        return $this->sukses(ProdukSayaResource::make(
+            $stok->sesuaikan($produk->id, $request->integer('selisih')),
+        ));
     }
 
     public function update(ProdukSayaRequest $request, int $id): JsonResponse

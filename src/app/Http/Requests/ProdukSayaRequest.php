@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Enums\StatusProduk;
+use App\Services\PenjagaStok;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -30,9 +31,22 @@ final class ProdukSayaRequest extends FormRequest
             // LP-1: aturan integer menolak 185000.5 maupun "185.000".
             // Batas atas mencegah luapan bilangan saat harga dikali kuantitas.
             'harga_rupiah' => [$wajib, 'integer', 'between:100,1000000000'],
-            'stok' => [$wajib, 'integer', 'between:0,100000'],
+            // Stok hanya ditetapkan saat produk dibuat. Sesudahnya stok berubah lewat PenjagaStok:
+            // angka mutlak dari layar penjual dapat menimpa penjualan yang terjadi setelah layar
+            // itu dimuat (LP-4).
+            'stok' => $this->isMethod('POST')
+                ? ['required', 'integer', 'between:0,'.PenjagaStok::MAKSIMUM]
+                : ['prohibited'],
             'berat_gram' => ['sometimes', 'integer', 'between:0,100000'],
             'status' => ['sometimes', Rule::enum(StatusProduk::class)],
+        ];
+    }
+
+    /** @return array<string, string> */
+    public function messages(): array
+    {
+        return [
+            'stok.prohibited' => 'Ubah stok dengan selisih lewat POST /toko-saya/produk/{id}/stok.',
         ];
     }
 }
