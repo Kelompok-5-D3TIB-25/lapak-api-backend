@@ -25,7 +25,7 @@ it('menolak permintaan tanpa kunci sesi', function () {
 });
 
 it('menampilkan saldo nol tanpa membuat dompet bagi pengguna tanpa transaksi', function () {
-    $this->sebagai(Pengguna::factory()->create())->getJson('/api/v1/dompet')
+    $this->sebagai(Pengguna::factory()->penjual()->create())->getJson('/api/v1/dompet')
         ->assertOk()
         ->assertExactJson(['sukses' => true, 'meta' => null, 'data' => [
             'saldo' => ['rupiah' => 0, 'tampilan' => 'Rp 0'],
@@ -36,8 +36,8 @@ it('menampilkan saldo nol tanpa membuat dompet bagi pengguna tanpa transaksi', f
 });
 
 it('menampilkan saldo milik sendiri dan bukan milik orang lain', function () {
-    $sri = Pengguna::factory()->create();
-    $wulan = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->penjual()->create();
+    $wulan = Pengguna::factory()->penjual()->create();
     lepasDanaKe($sri, 363_500, 'LPK-UJI-1001');
     lepasDanaKe($wulan, 97_500, 'LPK-UJI-1002');
 
@@ -51,7 +51,7 @@ it('menampilkan saldo milik sendiri dan bukan milik orang lain', function () {
 });
 
 it('membuka saldo tanpa sesi segar tetapi menuntutnya untuk riwayat mutasi (LP-15)', function () {
-    $sri = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->penjual()->create();
     lepasDanaKe($sri, 363_500, 'LPK-UJI-1003');
 
     $this->sebagai($sri, segar: false)->getJson('/api/v1/dompet')->assertOk();
@@ -61,7 +61,7 @@ it('membuka saldo tanpa sesi segar tetapi menuntutnya untuk riwayat mutasi (LP-1
 });
 
 it('membuka riwayat setelah kata sandi dikonfirmasi, dengan kunci yang baru', function () {
-    $sri = Pengguna::factory()->create(['kata_sandi' => 'BatikSolo2026']);
+    $sri = Pengguna::factory()->penjual()->create(['kata_sandi' => 'BatikSolo2026']);
     lepasDanaKe($sri, 363_500, 'LPK-UJI-1004');
 
     $kunciBaru = $this->sebagai($sri, segar: false)
@@ -82,8 +82,8 @@ it('membuka riwayat setelah kata sandi dikonfirmasi, dengan kunci yang baru', fu
 });
 
 it('menampilkan hanya mutasi dompet sendiri, terbaru lebih dulu', function () {
-    $sri = Pengguna::factory()->create();
-    $wulan = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->penjual()->create();
+    $wulan = Pengguna::factory()->penjual()->create();
     lepasDanaKe($sri, 100_000, 'LPK-UJI-1005');
     lepasDanaKe($wulan, 55_000, 'LPK-UJI-1006');
     lepasDanaKe($sri, 250_000, 'LPK-UJI-1007');
@@ -95,7 +95,7 @@ it('menampilkan hanya mutasi dompet sendiri, terbaru lebih dulu', function () {
         ->assertJsonPath('data.0.saldo_setelah', 350_000)
         ->assertJsonPath('data.1.rujukan', 'LPK-UJI-1005');
 
-    $this->sebagai(Pengguna::factory()->create())->getJson('/api/v1/dompet/mutasi')
+    $this->sebagai(Pengguna::factory()->penjual()->create())->getJson('/api/v1/dompet/mutasi')
         ->assertOk()
         ->assertJsonPath('meta.total', 0);
 });
