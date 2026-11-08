@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Balapan;
 
-use App\Domain\Pesanan\StatusPesanan;
 use App\Exceptions\ProdukTidakDapatDibeli;
 use App\Models\ButirPesanan;
 use App\Models\Checkout;
@@ -13,6 +12,8 @@ use App\Models\Pembayaran;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Toko;
+use App\Services\PembatalanOtomatis;
+use App\Services\PenjagaStok;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -29,8 +30,8 @@ final class BatalSaatCheckout implements SkenarioBalapan
     private const STOK_AWAL = 12;
 
     public function __construct(
-        private readonly \App\Services\PembatalanOtomatis $pembatalan,
-        private readonly \App\Services\PenjagaStok $penjaga,
+        private readonly PembatalanOtomatis $pembatalan,
+        private readonly PenjagaStok $penjaga,
     ) {}
 
     public function keterangan(): string

@@ -9,6 +9,8 @@ use App\Models\Checkout;
 use App\Models\Pengguna;
 use App\Models\Produk;
 use App\Models\Toko;
+use App\Services\LayananKeranjang;
+use App\Services\PenerbitSesi;
 use Illuminate\Support\Str;
 
 /**
@@ -44,9 +46,9 @@ final class KunciGanda implements SkenarioBalapan
         ]);
         $alamat = Alamat::factory()->for($pembeli, 'pengguna')->create();
 
-        app(\App\Services\LayananKeranjang::class)->aturButir($pembeli, $produk->id, 2);
+        app(LayananKeranjang::class)->aturButir($pembeli, $produk->id, 2);
 
-        [, $kunciSesi] = app(\App\Services\PenerbitSesi::class)->terbitkan($pembeli, 'Uji balapan');
+        [, $kunciSesi] = app(PenerbitSesi::class)->terbitkan($pembeli, 'Uji balapan');
 
         return [
             'pembeli' => $pembeli->id,

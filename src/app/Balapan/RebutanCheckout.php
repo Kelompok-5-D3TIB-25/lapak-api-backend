@@ -11,6 +11,8 @@ use App\Models\Pengguna;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Toko;
+use App\Services\LayananKeranjang;
+use App\Services\PenerbitSesi;
 use Illuminate\Support\Str;
 
 /**
@@ -54,9 +56,9 @@ final class RebutanCheckout implements SkenarioBalapan
             ]);
             $alamat = Alamat::factory()->for($pembeli, 'pengguna')->create();
 
-            app(\App\Services\LayananKeranjang::class)->aturButir($pembeli, $produk->id, 1);
+            app(LayananKeranjang::class)->aturButir($pembeli, $produk->id, 1);
 
-            [, $kunciSesi] = app(\App\Services\PenerbitSesi::class)->terbitkan($pembeli, 'Uji balapan');
+            [, $kunciSesi] = app(PenerbitSesi::class)->terbitkan($pembeli, 'Uji balapan');
 
             $peserta[] = [
                 'pembeli' => $pembeli->id,
