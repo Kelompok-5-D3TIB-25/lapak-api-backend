@@ -16,4 +16,7 @@ return [
     'DELETE api/v1/admin/pengguna/{id}/peran/{peran}' => ['admin'],
 
     'GET api/v1/alamat' => ['pembeli'],
+    'POST api/v1/alamat' => ['pembeli'],
+    'PUT api/v1/alamat/{id}/utama' => ['pembeli'],
+    'DELETE api/v1/alamat/{id}' => ['pembeli'],
 ];

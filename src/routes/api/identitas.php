@@ -50,4 +50,7 @@ Route::middleware(['auth:sesi', 'izin:pesanan.buat'])
     ->whereNumber('id')
     ->group(function (): void {
         Route::get('/', [AlamatController::class, 'index'])->name('index');
+        Route::post('/', [AlamatController::class, 'store'])->name('store');
+        Route::put('{id}/utama', [AlamatController::class, 'utama'])->name('utama');
+        Route::delete('{id}', [AlamatController::class, 'destroy'])->name('destroy');
     });
