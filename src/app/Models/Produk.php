@@ -45,6 +45,12 @@ final class Produk extends Model
         return $this->belongsTo(Kategori::class, 'kategori_id');
     }
 
+    /** Dipakai LP-5. Relasi toko harus sudah dimuat; mode ketat menolak pemuatan malas. */
+    public function dimilikiOleh(Pengguna $pengguna): bool
+    {
+        return $this->toko->pemilik_id === $pengguna->id;
+    }
+
     /**
      * LP-4: produk tampil hanya bila berstatus aktif DAN tokonya aktif.
      * Seluruh pintu publik wajib lewat scope ini; jangan menulis ulang syaratnya di controller.
