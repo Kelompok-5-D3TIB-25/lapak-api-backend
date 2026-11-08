@@ -19,6 +19,8 @@ const RUTE_PUBLIK = [
     'GET api/v1/produk/{slug}',
     'GET api/v1/toko/{slug}',
     'POST api/v1/simulasi-belanja',
+    // Dipanggil gerbang pembayaran, bukan pengguna. Dijaga tanda tangan HMAC, bukan kunci sesi.
+    'POST api/v1/webhook/pembayaran',
 ];
 
 /** @return list<array{0: string, 1: Rute}> pasangan "METODE alamat" dan rutenya */
