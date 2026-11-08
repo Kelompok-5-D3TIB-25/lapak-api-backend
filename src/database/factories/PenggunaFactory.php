@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enums\NamaPeran;
 use App\Enums\StatusAkun;
 use App\Models\Pengguna;
+use App\Models\Peran;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,5 +29,45 @@ class PenggunaFactory extends Factory
     public function ditangguhkan(): static
     {
         return $this->state(['status' => StatusAkun::Ditangguhkan]);
+    }
+
+    /**
+     * Pengguna dari factory TIDAK memegang peran apa pun kecuali diminta.
+     * Setiap uji menyebut sendiri peran yang dibutuhkannya, sehingga pembaca uji tahu siapa pelakunya.
+     */
+    public function denganPeran(NamaPeran ...$peran): static
+    {
+        return $this->afterCreating(function (Pengguna $pengguna) use ($peran) {
+            $nama = array_map(fn (NamaPeran $p) => $p->value, $peran);
+            $idPeran = Peran::query()->whereIn('nama', $nama)->pluck('id');
+
+            $pengguna->peran()->syncWithoutDetaching($idPeran);
+        });
+    }
+
+    public function pembeli(): static
+    {
+        return $this->denganPeran(NamaPeran::Pembeli);
+    }
+
+    /** Penjual di Lapak selalu juga pembeli: ia mendaftar sebagai pembeli, lalu tokonya disetujui. */
+    public function penjual(): static
+    {
+        return $this->denganPeran(NamaPeran::Pembeli, NamaPeran::Penjual);
+    }
+
+    public function admin(): static
+    {
+        return $this->denganPeran(NamaPeran::Admin);
+    }
+
+    public function keuangan(): static
+    {
+        return $this->denganPeran(NamaPeran::Keuangan);
+    }
+
+    public function auditor(): static
+    {
+        return $this->denganPeran(NamaPeran::Auditor);
     }
 }
