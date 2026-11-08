@@ -7,7 +7,9 @@ namespace App\Services;
 use App\Exceptions\ProdukTidakDapatDibeli;
 use App\Models\Produk;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use LogicException;
 
 /**
  * Satu-satunya pintu perubahan stok oleh transaksi (LP-4), seperti BukuBesar bagi saldo.
@@ -17,18 +19,29 @@ use InvalidArgumentException;
 final class PenjagaStok
 {
     /**
-     * Produk yang akan dibeli, beserta tokonya, berkunci nomor produk.
+     * Produk yang akan dibeli, beserta tokonya, berkunci nomor produk. Barisnya DIKUNCI sampai
+     * transaksi pemanggil selesai.
      *
      * @param  list<int>  $idProduk
      * @return Collection<int, Produk>
      */
     public function ambil(array $idProduk): Collection
     {
-        // BELUM AMAN bila dua pembeli datang bersamaan: baris dibaca tanpa dikunci.
-        // Versi kontrak ini benar untuk satu pembeli pada satu waktu. Dikunci pada jendela B.
+        // Kunci baris hanya bertahan sampai transaksi selesai. Di luar transaksi, kunci dilepas
+        // begitu SELECT ini selesai dan tidak melindungi apa pun.
+        if (DB::transactionLevel() === 0) {
+            throw new LogicException('PenjagaStok::ambil() harus di dalam DB::transaction().');
+        }
+
+        // lockForUpdate(): pembeli lain yang menginginkan baris yang sama MENUNGGU di sini sampai
+        // transaksi ini selesai, lalu membaca stok yang sudah berkurang.
+        // orderBy('id'): semua pembeli mengunci dengan urutan yang sama, apa pun urutan isi
+        // keranjangnya, sehingga tidak ada dua transaksi yang saling menunggu selamanya.
         return Produk::query()
             ->with('toko')
             ->whereIn('id', $idProduk)
+            ->orderBy('id')
+            ->lockForUpdate()
             ->get()
             ->keyBy('id');
     }
