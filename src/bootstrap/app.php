@@ -2,6 +2,7 @@
 
 use App\Console\Commands\Balapan;
 use App\Console\Commands\BalapanAnak;
+use App\Console\Commands\BatalkanKedaluwarsa;
 use App\Console\Commands\BeriPeran;
 use App\Console\Commands\MatriksIzin;
 use App\Exceptions\PenanganGalatApi;
@@ -28,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
         MatriksIzin::class,
         Balapan::class,
         BalapanAnak::class,
+        BatalkanKedaluwarsa::class,
     ])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [PaksaJson::class, IdPermintaan::class, TanpaCache::class]);
