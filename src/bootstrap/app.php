@@ -1,13 +1,17 @@
 <?php
 
+use App\Console\Commands\BeriPeran;
+use App\Console\Commands\MatriksIzin;
 use App\Exceptions\PenanganGalatApi;
 use App\Http\Middleware\IdPermintaan;
 use App\Http\Middleware\PaksaJson;
+use App\Http\Middleware\PeriksaIzin;
 use App\Http\Middleware\SesiSegar;
 use App\Http\Middleware\TanpaCache;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,9 +20,21 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withCommands([
+        BeriPeran::class,
+        MatriksIzin::class,
+    ])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [PaksaJson::class, IdPermintaan::class, TanpaCache::class]);
-        $middleware->alias(['sesi.segar' => SesiSegar::class]);
+        $middleware->alias(['sesi.segar' => SesiSegar::class, 'izin' => PeriksaIzin::class]);
+
+        // Izin diperiksa SEBELUM kerangka mencari objek dari alamat. Tanpa baris ini, orang yang
+        // tidak berwenang menerima 404 untuk nomor yang tidak ada dan 403 untuk nomor yang ada,
+        // sehingga ia dapat memetakan isi basis data dari perbedaan kedua jawaban itu.
+        $middleware->prependToPriorityList(
+            before: SubstituteBindings::class,
+            prepend: PeriksaIzin::class,
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         PenanganGalatApi::daftarkan($exceptions);
