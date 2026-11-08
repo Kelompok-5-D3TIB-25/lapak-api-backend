@@ -7,7 +7,7 @@ use App\Models\Produk;
 use App\Models\Toko;
 
 beforeEach(function () {
-    $this->sri = Pengguna::factory()->create();
+    $this->sri = Pengguna::factory()->penjual()->create();
     $this->tokoSri = Toko::factory()->for($this->sri, 'pemilik')->create();
     $this->batik = Kategori::factory()->create();
 
@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 it('menjawab 404 bagi pengguna yang belum membuka toko', function () {
-    $this->sebagai(Pengguna::factory()->create())
+    $this->sebagai(Pengguna::factory()->penjual()->create())
         ->postJson('/api/v1/toko-saya/produk', ($this->dataProduk)())
         ->assertNotFound();
 });

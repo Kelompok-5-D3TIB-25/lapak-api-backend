@@ -74,6 +74,24 @@ Authorization: Bearer <kunci>
 ```
 Kunci diperoleh dari `POST /api/v1/masuk`. Simpan kunci di tempat yang aman; server tidak dapat mengembalikannya setelah respons pertama dikirim.
 
+## Otorisasi
+
+- Kewenangan ditentukan izin yang melekat pada peran, bukan nama peran (LP-2). Satu akun boleh memegang beberapa peran; izinnya adalah gabungan izin seluruh perannya.
+- Rute terlindung menyebut paling banyak satu izin: `->middleware('izin:<nama>')`. Bila dua peran membutuhkan pintu yang sama, keduanya diberi izin yang sama. Rute tidak pernah menyebut nama peran.
+- Setiap rute terlindung memiliki tepat satu baris pada `tests/Feature/Sistem/matriks/<domain>.php`. Rute yang terbuka bagi siapa pun yang sudah masuk ditulis `'*'`, tidak dibiarkan tanpa baris.
+- Urutan pemeriksaan selalu sama: kunci sah (401), memegang izin (403 `DITOLAK`), sesi segar bila rutenya menuntut (403 `LP-15`). Baru setelah ketiganya lolos, masukan divalidasi dan objek dicari.
+- Pertanyaan "objek yang ini boleh?" dijawab di dalam controller: kueri berlingkup (objek milik orang lain dijawab 404) atau Policy (403 `DITOLAK`).
+- Badan 403 `DITOLAK` selalu sama dan tidak menyebut izin apa yang kurang.
+- `GET /saya` menyertakan `pengguna.peran` dan `izin`.
+- Peran hanya berubah lewat `App\Services\PengelolaPeran`. Setiap perubahan mencabut seluruh sesi akun itu.
+
+| Peran | Izin |
+| --- | --- |
+| `pembeli` | `keranjang.kelola`, `toko.buka` |
+| `penjual` | `produk.kelola`, `dompet.lihat` |
+| `admin` | `toko.moderasi`, `peran.kelola` |
+| `keuangan` | `buku-besar.lihat` |
+| `auditor` | `buku-besar.lihat` |
 
 ## Uang dan waktu
 

@@ -9,13 +9,13 @@ it('menolak permintaan tanpa kunci sesi', function () {
 });
 
 it('menjawab 404 bila pengguna belum memiliki toko', function () {
-    $this->sebagai(Pengguna::factory()->create())
+    $this->sebagai(Pengguna::factory()->pembeli()->create())
         ->getJson('/api/v1/toko-saya')
         ->assertNotFound();
 });
 
 it('menampilkan toko milik pengguna yang sedang masuk, termasuk statusnya', function () {
-    $sri = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->pembeli()->create();
     $toko = Toko::factory()->menunggu()->for($sri, 'pemilik')->create(['nama' => 'Batik Bu Sri']);
     Produk::factory()->for($toko)->count(2)->create();
     Toko::factory()->create(['nama' => 'Toko Orang Lain']);
@@ -30,7 +30,7 @@ it('menampilkan toko milik pengguna yang sedang masuk, termasuk statusnya', func
 });
 
 it('mengenali produk milik pengguna (bahan LP-5)', function () {
-    $sri = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->pembeli()->create();
     $milikSri = Produk::factory()->for(Toko::factory()->for($sri, 'pemilik'))->create();
     $milikLain = Produk::factory()->create();
 
@@ -39,8 +39,8 @@ it('mengenali produk milik pengguna (bahan LP-5)', function () {
 });
 
 it('membuka toko atas nama pengguna sesi, bukan atas nama kiriman klien', function () {
-    $sri = Pengguna::factory()->create();
-    $orangLain = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->pembeli()->create();
+    $orangLain = Pengguna::factory()->pembeli()->create();
 
     $slug = $this->sebagai($sri)->postJson('/api/v1/toko-saya', [
         'nama' => 'Batik Laweyan Bu Sri', 'kota' => 'Surakarta', 'ongkir_rupiah' => 12_000,
@@ -61,7 +61,7 @@ it('membuka toko atas nama pengguna sesi, bukan atas nama kiriman klien', functi
 });
 
 it('menolak toko kedua untuk pengguna yang sama (LP-3)', function () {
-    $sri = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->pembeli()->create();
     Toko::factory()->for($sri, 'pemilik')->create();
 
     $this->sebagai($sri)->postJson('/api/v1/toko-saya', [
@@ -74,7 +74,7 @@ it('menolak toko kedua untuk pengguna yang sama (LP-3)', function () {
 });
 
 it('mengubah hanya kolom yang dikirim, dan hanya pada toko sendiri', function () {
-    $sri = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->pembeli()->create();
     $tokoSri = Toko::factory()->for($sri, 'pemilik')->create(['nama' => 'Batik Bu Sri']);
     $tokoLain = Toko::factory()->create(['nama' => 'Toko Orang Lain']);
 
@@ -88,7 +88,7 @@ it('mengubah hanya kolom yang dikirim, dan hanya pada toko sendiri', function ()
 });
 
 it('menolak ongkir pecahan atau negatif (LP-1)', function (mixed $ongkir) {
-    $this->sebagai(Pengguna::factory()->create())->postJson('/api/v1/toko-saya', [
+    $this->sebagai(Pengguna::factory()->pembeli()->create())->postJson('/api/v1/toko-saya', [
         'nama' => 'Toko Uji', 'kota' => 'Surakarta', 'ongkir_rupiah' => $ongkir,
     ])
         ->assertUnprocessable()

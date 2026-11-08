@@ -11,3 +11,9 @@
 - Bagian yang dibantu AI: Sintaks escaping wildcard LIKE SQL dan format paginasi resource.
 - Bagian yang ditulis sendiri: Migration tabel toko, kategori, produk, scopeTampil, dan seeder katalog Solo Raya.
 - Hal yang perlu diperbaiki setelah keluaran AI: Memastikan operator escape query LIKE aman dari injeksi karakter khusus.
+
+## Sesi 3
+
+| Tanggal | Bagian | Alat | Cara verifikasi |
+|---|---|---|---|
+| 2026-11-15 | RBAC, peran, izin, middleware, matriks | Asisten AI | php artisan test, pint --test |
