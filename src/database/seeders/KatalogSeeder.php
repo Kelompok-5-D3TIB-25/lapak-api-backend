@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Enums\NamaPeran;
 use App\Enums\StatusProduk;
 use App\Enums\StatusToko;
 use App\Models\Kategori;
 use App\Models\Pengguna;
 use App\Models\Produk;
 use App\Models\Toko;
+use App\Services\PengelolaPeran;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use RuntimeException;
@@ -53,12 +55,12 @@ class KatalogSeeder extends Seeder
             $kategori[$nama] = Kategori::updateOrCreate(['slug' => Str::slug($nama)], ['nama' => $nama]);
         }
 
+        $pengelola = app(PengelolaPeran::class);
+
         foreach (self::TOKO as [$surel, $namaToko, $kota, $ongkir, $statusToko, $daftarProduk]) {
             $pemilik = Pengguna::where('surel', $surel)->first()
                 ?? throw new RuntimeException("{$surel} belum ada. Jalankan PenggunaSeeder dulu.");
 
-            // status dan pemilik_id tidak ada di $fillable, jadi diisi lewat forceFill.
-            // forceFill hanya pantas di seeder dan service, tidak pernah dengan masukan klien.
             $toko = Toko::firstOrNew(['slug' => Str::slug($namaToko)]);
             $toko->forceFill([
                 'pemilik_id' => $pemilik->id,
@@ -67,6 +69,11 @@ class KatalogSeeder extends Seeder
                 'ongkir_rupiah' => $ongkir,
                 'status' => $statusToko,
             ])->save();
+
+            // Peran penjual mengikuti toko (LP-3).
+            if ($statusToko !== StatusToko::Menunggu) {
+                $pengelola->beri($pemilik, NamaPeran::Penjual);
+            }
 
             foreach ($daftarProduk as [$namaKategori, $namaProduk, $harga, $stok, $berat, $status]) {
                 $produk = Produk::firstOrNew(['slug' => Str::slug($namaProduk)]);

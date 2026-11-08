@@ -26,6 +26,7 @@ final class Toko extends Model
         return [
             'status' => StatusToko::class,
             'ongkir_rupiah' => 'integer',
+            'dimoderasi_pada' => 'datetime',
         ];
     }
 
