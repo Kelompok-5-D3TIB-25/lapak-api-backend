@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Pengguna;
+use App\Models\Sesi;
 use App\Services\PemeriksaSesi;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
@@ -61,6 +62,13 @@ class AppServiceProvider extends ServiceProvider
             Limit::perMinute(config('lapak.laju.masuk_per_ip'))
                 ->by('masuk-ip:'.$request->ip()),
         ]);
+
+        // Pintu yang mengubah uang atau stok dibatasi per SESI, bukan per IP. Satu kunci curian
+        // tidak dapat dipakai menghujani checkout, dan pembeli lain di jaringan yang sama
+        // (kampus, kantor) tidak ikut terhambat.
+        RateLimiter::for('transaksi', fn (Request $request) => Limit::perMinute(
+            config('lapak.transaksi.laju_per_menit'),
+        )->by('transaksi:'.Sesi::dariPermintaan($request)->pengenal));
 
         RateLimiter::for('konfirmasi', fn (Request $request) => Limit::perMinute(
             config('lapak.laju.konfirmasi'),
