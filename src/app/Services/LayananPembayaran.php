@@ -24,7 +24,7 @@ final class LayananPembayaran
             'checkout_id' => $checkout->id,
             'kode' => 'BYR-'.Str::ulid(),
             // Jumlahnya disalin dari checkout, tidak pernah dari klien (LP-6).
-            'jumlah_rupiah' => $checkout->total,
+            'jumlah_rupiah' => $checkout->total_rupiah,
             'status' => StatusPembayaran::Menunggu,
             'batas_bayar_pada' => now()->addHours(config('lapak.batas_bayar_jam')),
         ])->save();

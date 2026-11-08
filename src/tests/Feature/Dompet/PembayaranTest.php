@@ -9,7 +9,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 
 beforeEach(function () {
     $this->layanan = app(LayananPembayaran::class);
-    $this->checkout = Checkout::factory()->create(['total' => 567_500]);
+    $this->checkout = Checkout::factory()->create(['total_rupiah' => 567_500]);
 });
 
 it('membuat tagihan sebesar total checkout dengan batas bayar 24 jam (LP-7, LP-10)', function () {
