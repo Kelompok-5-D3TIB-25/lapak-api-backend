@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\JenisDompet;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Dompet extends Model
@@ -21,6 +22,16 @@ final class Dompet extends Model
             'jenis' => JenisDompet::class,
             'saldo_rupiah' => 'integer',
         ];
+    }
+
+    /**
+     * Null untuk dompet sistem (eksternal, escrow, pendapatan).
+     *
+     * @return BelongsTo<Pengguna, $this>
+     */
+    public function pemilik(): BelongsTo
+    {
+        return $this->belongsTo(Pengguna::class, 'pengguna_id');
     }
 
     /** @return HasMany<MutasiSaldo, $this> */
