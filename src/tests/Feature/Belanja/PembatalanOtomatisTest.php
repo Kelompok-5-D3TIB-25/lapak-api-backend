@@ -3,6 +3,7 @@
 use App\Domain\Pesanan\StatusPesanan;
 use App\Enums\StatusPembayaran;
 use App\Models\Alamat;
+use App\Models\ButirPesanan;
 use App\Models\Checkout;
 use App\Models\Pembayaran;
 use App\Models\Pengguna;
@@ -11,6 +12,7 @@ use App\Models\Produk;
 use App\Models\Toko;
 use App\Services\LayananKeranjang;
 use App\Services\PembatalanOtomatis;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Checkout menunggu pembayaran yang batas bayarnya sudah lewat.
@@ -100,4 +102,28 @@ it('tidak membatalkan tagihan yang masih punya waktu', function () {
 
     expect($produk->refresh()->stok)->toBe(4)
         ->and(Pesanan::sole()->status)->toBe(StatusPesanan::MenungguPembayaran);
+});
+
+it('mengembalikan stok urut nomor produk, apa pun urutan butirnya', function () {
+    $checkout = Checkout::factory()->create();
+    Pembayaran::factory()->for($checkout)->create(['batas_bayar_pada' => now()->subMinute()]);
+    $pesanan = Pesanan::factory()->for($checkout)->create();
+    [$kecil, $tengah, $besar] = Produk::factory()->count(3)->create(['stok' => 0])->all();
+
+    // Butir sengaja disimpan dari nomor produk terbesar.
+    foreach ([$besar, $kecil, $tengah] as $barang) {
+        ButirPesanan::factory()->for($pesanan)->create(['produk_id' => $barang->id]);
+    }
+
+    DB::enableQueryLog();
+    app(PembatalanOtomatis::class)->batalkan($checkout->id);
+
+    $urutan = collect(DB::getQueryLog())
+        // Tanda kutip nama tabel berbeda antara SQLite dan MySQL, maka dicocokkan dengan titik.
+        ->filter(fn (array $kueri) => preg_match('/^update .produk. /', $kueri['query']) === 1)
+        ->map(fn (array $kueri) => last($kueri['bindings']))
+        ->values()
+        ->all();
+
+    expect($urutan)->toBe([$kecil->id, $tengah->id, $besar->id]);
 });
