@@ -12,6 +12,7 @@ use App\Exceptions\SaldoTidakCukup;
 use App\Models\Dompet;
 use App\Models\MutasiSaldo;
 use App\Models\Pengguna;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -33,13 +34,27 @@ final class BukuBesar
 
     public function dompetPenjual(Pengguna $penjual): Dompet
     {
-        return $this->ambilAtauBuat('penjual:'.$penjual->id, JenisDompet::Penjual, $penjual->id);
+        return $this->ambilAtauBuat($this->kodePenjual($penjual), JenisDompet::Penjual, $penjual->id);
     }
 
     /** Hanya membaca. Dipakai pintu GET agar melihat saldo tidak pernah menulis ke basis data. */
     public function cariDompetPenjual(Pengguna $penjual): ?Dompet
     {
-        return Dompet::query()->where('kode', 'penjual:'.$penjual->id)->first();
+        return Dompet::query()->where('kode', $this->kodePenjual($penjual))->first();
+    }
+
+    /**
+     * Riwayat mutasi seorang penjual, terbaru lebih dulu. Kosong bila ia belum memiliki dompet.
+     *
+     * @return Builder<MutasiSaldo>
+     */
+    public function mutasiPenjual(Pengguna $penjual): Builder
+    {
+        $kode = $this->kodePenjual($penjual);
+
+        return MutasiSaldo::query()
+            ->whereHas('dompet', fn (Builder $dompet) => $dompet->where('kode', $kode))
+            ->orderByDesc('id');
     }
 
     /**
@@ -111,6 +126,11 @@ final class BukuBesar
         ])->save();
 
         $dompet->forceFill(['saldo_rupiah' => $saldoBaru])->save();
+    }
+
+    private function kodePenjual(Pengguna $penjual): string
+    {
+        return 'penjual:'.$penjual->id;
     }
 
     private function ambilAtauBuat(string $kode, JenisDompet $jenis, ?int $penggunaId): Dompet
