@@ -145,3 +145,18 @@ Respons `201`: `id`, `nama`, `surel` (huruf kecil), `telepon`, `status`, `terdaf
 ```
 
 Hanya `produk_id` dan `kuantitas` yang divalidasi. `harga_satuan`, `total_bayar`, dan kolom lain dari klien diabaikan (LP-6). Satu toko menghasilkan satu rincian (LP-7). Komisi dihitung dari subtotal, ongkir utuh untuk penjual (LP-8).
+
+## Idempotensi
+
+- Setiap permintaan yang mengubah uang atau stok wajib membawa header `Idempotency-Key` (LP-11):
+  16 sampai 64 huruf, angka, garis bawah, atau tanda hubung. UUID memenuhi syarat ini.
+- Klien membuat SATU kunci untuk satu niat, misalnya satu kali menekan tombol bayar, dan memakai
+  kunci yang sama setiap kali mengulang permintaan itu karena jaringan putus atau batas waktu habis.
+- Permintaan pertama yang berhasil (2xx) dicatat bersama responsnya. Pengulangan dengan kunci dan
+  badan yang sama menerima respons yang sama, ditandai header `Idempotency-Replayed: true`, dan
+  tidak berefek lagi.
+- Permintaan yang gagal tidak meninggalkan catatan. Setelah sebabnya dibetulkan, kunci yang sama
+  boleh dipakai lagi.
+- Kunci yang sama dengan badan yang berbeda dijawab 422 `LP-11`. Kunci berlaku per pengguna.
+- Catatan kunci dan seluruh perubahan data berada dalam satu transaksi basis data. Rute yang
+  memasang `idempoten` karenanya tidak boleh memanggil layanan luar di dalam controller-nya.
