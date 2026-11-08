@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\DB;
 final class BukuAlamat
 {
     /**
-     * @param array<string, string> $data hasil validasi AlamatRequest
+     * @param  array<string, string>  $data  hasil validasi AlamatRequest
      */
     public function tambah(Pengguna $pemilik, array $data): Alamat
     {
@@ -75,7 +75,7 @@ final class BukuAlamat
     /**
      * @template T
      *
-     * @param Closure(Collection<int, Alamat>): T $kerja menerima alamat pemilik, urut nomor
+     * @param  Closure(Collection<int, Alamat>): T  $kerja  menerima alamat pemilik, urut nomor
      * @return T
      */
     private function terkunci(Pengguna $pemilik, Closure $kerja): mixed
