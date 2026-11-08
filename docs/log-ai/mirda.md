@@ -11,3 +11,9 @@
 - Bagian yang dibantu AI: Pengecekan algoritma pembulatan komisi integer rupiah tanpa floating point.
 - Bagian yang ditulis sendiri: Seluruh class `Uang`, `BarisBelanja`, `RincianToko`, `PenghitungBelanja`, dan endpoint simulasi belanja.
 - Hal yang perlu diperbaiki setelah keluaran AI: Memastikan seluruh metode Uang bersifat immutable dan mengembalikan instans baru.
+
+## Sesi 3
+
+| Tanggal | Bagian | Alat | Cara verifikasi |
+|---|---|---|---|
+| 2026-11-15 | RBAC, peran, izin, middleware, matriks | Asisten AI | php artisan test, pint --test |
