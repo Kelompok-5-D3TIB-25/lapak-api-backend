@@ -17,3 +17,9 @@
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
 | 2026-11-15 | RBAC, peran, izin, middleware, matriks | Asisten AI | php artisan test, pint --test |
+
+## Sesi 4
+
+| Tanggal | Bagian | Alat | Cara verifikasi |
+|---|---|---|---|
+| 2026-11-09 | A4 tabel checkout/pesanan, gembok checkout, mesin status; B2 checkout atomik dan pembatalan otomatis; P1 urutan kunci | Asisten AI | pest pada SQLite dan MySQL, skenario keranjang-ganda dan batal-saat-checkout pada MySQL |
