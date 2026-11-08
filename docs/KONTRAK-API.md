@@ -47,7 +47,9 @@ API hanya berbicara JSON. Middleware `PaksaJson` menetapkan `Accept: application
 | HTTP | Kode | Kapan |
 |---|---|---|
 | 401 | `BELUM_MASUK` | Belum masuk atau sesi tidak berlaku |
+| 401 | `KREDENSIAL_SALAH` | Surel atau kata sandi salah saat masuk. Pesan sama untuk surel tak terdaftar dan kata sandi salah. |
 | 403 | `DITOLAK` | Tidak berwenang |
+| 403 | `LP-15` | Tindakan sensitif menuntut konfirmasi ulang kata sandi via POST /api/v1/sesi/konfirmasi. |
 | 404 | `TIDAK_DITEMUKAN` | Sumber daya tidak ada |
 | 405 | `METODE_TIDAK_DIIZINKAN` | Metode HTTP salah |
 | 422 | `VALIDASI` | Validasi masukan gagal |
@@ -63,6 +65,15 @@ Pelanggaran aturan bisnis membawa kode `LP-1` sampai `LP-17` pada `galat.kode`. 
 |---|---|---|
 | `Accept: application/json` | permintaan | Disarankan; dipaksa middleware |
 | `X-Request-Id` | respons | UUID buatan server, juga muncul di log |
+
+## Autentikasi
+
+Setiap permintaan yang bukan publik harus menyertakan header:
+```
+Authorization: Bearer <kunci>
+```
+Kunci diperoleh dari `POST /api/v1/masuk`. Simpan kunci di tempat yang aman; server tidak dapat mengembalikannya setelah respons pertama dikirim.
+
 
 ## Uang dan waktu
 
