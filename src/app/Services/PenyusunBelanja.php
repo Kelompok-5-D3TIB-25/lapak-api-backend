@@ -13,6 +13,7 @@ use App\Domain\Uang;
 use App\Exceptions\ProdukTidakDapatDibeli;
 use App\Models\Pengguna;
 use App\Models\Produk;
+use Illuminate\Support\Collection;
 
 /**
  * Jembatan antara basis data dan rumus murni: mengambil harga dan stok TERKINI dari server,
@@ -24,20 +25,29 @@ final class PenyusunBelanja
      * Memilah butir menjadi yang dapat dihitung dan yang bermasalah, tanpa melempar galat.
      * Dipakai keranjang: isi keranjang bisa menjadi basi, dan membukanya tidak boleh gagal.
      *
+     * Bila $diTangan diisi, tidak ada kueri produk di sini. Harga dan stok dihitung dari baris
+     * yang sudah diambil pemanggil lewat PenjagaStok, yaitu baris yang sedang dikuncinya.
+     *
      * @param  list<array{produk_id: int, kuantitas: int}>  $butir
      * @param  Pengguna|null  $pembeli  bila diisi, produk dari toko miliknya ikut ditandai (LP-5)
+     * @param  Collection<int, Produk>|null  $diTangan  lihat keterangan di atas
      * @return array{0: list<RincianToko>, 1: list<ButirBermasalah>}
      */
-    public function pilah(array $butir, ?Pengguna $pembeli = null): array
-    {
+    public function pilah(
+        array $butir,
+        ?Pengguna $pembeli = null,
+        ?Collection $diTangan = null,
+    ): array {
         $diminta = collect($butir)->pluck('kuantitas', 'produk_id');
 
-        $produk = Produk::query()
-            ->tampil()
-            ->with('toko')
-            ->whereIn('id', $diminta->keys())
-            ->get()
-            ->keyBy('id');
+        $produk = $diTangan !== null
+            ? $diTangan->filter(fn (Produk $barang) => $barang->sedangTampil())->keyBy('id')
+            : Produk::query()
+                ->tampil()
+                ->with('toko')
+                ->whereIn('id', $diminta->keys())
+                ->get()
+                ->keyBy('id');
 
         $baris = [];
         $toko = [];
@@ -92,14 +102,18 @@ final class PenyusunBelanja
 
     /**
      * Versi tegas: satu butir bermasalah menggagalkan seluruhnya.
-     * Dipakai simulasi sekarang dan checkout pada Sesi 4.
+     * Dipakai simulasi belanja, pengisian keranjang, dan checkout.
      *
      * @param  list<array{produk_id: int, kuantitas: int}>  $butir
+     * @param  Collection<int, Produk>|null  $diTangan  lihat pilah()
      * @return list<RincianToko>
      */
-    public function susun(array $butir, ?Pengguna $pembeli = null): array
-    {
-        [$rincian, $bermasalah] = $this->pilah($butir, $pembeli);
+    public function susun(
+        array $butir,
+        ?Pengguna $pembeli = null,
+        ?Collection $diTangan = null,
+    ): array {
+        [$rincian, $bermasalah] = $this->pilah($butir, $pembeli, $diTangan);
 
         $hilang = [];
         foreach ($bermasalah as $masalah) {
