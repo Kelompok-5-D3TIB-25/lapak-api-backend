@@ -68,3 +68,29 @@
 /src/tests/Pest.php                               @Rokkett2500
 /src/app/Console/Commands/PangkasSesi.php         @Rokkett2500
 /src/app/Domain/Sesi/                             @ihsanpradipta45-alt
+
+# Sesi 3 — berkas baru
+/src/app/Enums/NamaIzin.php                       @Rokkett2500
+/src/app/Enums/NamaPeran.php                      @Rokkett2500
+/src/app/Models/Peran.php                        @Rokkett2500
+/src/app/Models/Izin.php                          @Rokkett2500
+/src/app/Services/PemeriksaIzin.php               @Rokkett2500
+/src/app/Services/PengelolaPeran.php              @Pradipta-ihsan-ariyanto
+/src/app/Http/Middleware/PeriksaIzin.php         @Rokkett2500
+/src/app/Policies/PenggunaPolicy.php              @Pradipta-ihsan-ariyanto
+/src/app/Policies/TokoPolicy.php                  @victor-isMe
+/src/app/Http/Controllers/PeranPenggunaController.php @Pradipta-ihsan-ariyanto
+/src/app/Http/Controllers/ModerasiTokoController.php @victor-isMe
+/src/app/Http/Controllers/BukuBesarController.php @nabelazahra-ptr26
+/src/app/Services/ModerasiToko.php               @victor-isMe
+/src/app/Console/Commands/BeriPeran.php          @Pradipta-ihsan-ariyanto
+/src/app/Console/Commands/MatriksIzin.php        @Rokkett2500
+/src/app/Domain/Pesanan/                        @mrdaknsh
+/src/database/migrations/*_500001_*.php         @Rokkett2500
+/src/database/migrations/*_200001_*.php          @victor-isMe
+/src/database/seeders/PeranIzinSeeder.php        @Rokkett2500
+/src/tests/Feature/Sistem/matriks/               @Rokkett2500
+/src/tests/Feature/Sistem/IzinTest.php           @Rokkett2500
+/src/tests/Feature/Sistem/IzinTerpakaiTest.php   @Rokkett2500
+/src/tests/Feature/Sistem/IngatanIzinTest.php    @Rokkett2500
+/src/tests/Unit/AturanTransisiTest.php           @mrdaknsh
