@@ -94,3 +94,35 @@
 /src/tests/Feature/Sistem/IzinTerpakaiTest.php   @Rokkett2500
 /src/tests/Feature/Sistem/IngatanIzinTest.php    @Rokkett2500
 /src/tests/Unit/AturanTransisiTest.php           @mrdaknsh
+
+# Sesi 4 — berkas baru
+/src/app/Models/Alamat.php                        @ihsanpradipta45-alt
+/src/app/Services/BukuAlamat.php                  @ihsanpradipta45-alt
+/src/app/Services/PenjagaTransaksi.php            @ihsanpradipta45-alt
+/src/app/Http/Controllers/AlamatController.php    @ihsanpradipta45-alt
+/src/app/Services/PenjagaStok.php                 @victor-isMe
+/src/app/Models/Checkout.php                      @mrdaknsh
+/src/app/Models/Pesanan.php                       @mrdaknsh
+/src/app/Models/ButirPesanan.php                  @mrdaknsh
+/src/app/Services/GembokCheckout.php              @mrdaknsh
+/src/app/Services/MesinStatusPesanan.php          @mrdaknsh
+/src/app/Services/LayananCheckout.php             @mrdaknsh
+/src/app/Services/PembatalanOtomatis.php         @mrdaknsh
+/src/app/Http/Controllers/CheckoutController.php  @mrdaknsh
+/src/app/Http/Controllers/PesananSayaController.php @mrdaknsh
+/src/app/Console/Commands/BatalkanKedaluwarsa.php @mrdaknsh
+/src/app/Models/Pembayaran.php                    @nabelazahra-ptr26
+/src/app/Services/LayananPembayaran.php           @nabelazahra-ptr26
+/src/app/Services/TandaTanganGateway.php          @nabelazahra-ptr26
+/src/app/Http/Controllers/WebhookPembayaranController.php @nabelazahra-ptr26
+/src/app/Http/Controllers/PembayaranSayaController.php @nabelazahra-ptr26
+/src/app/Console/Commands/SimulasiBayar.php       @nabelazahra-ptr26
+/src/app/Models/KunciIdempotensi.php              @Rokkett2500
+/src/app/Console/Commands/Balapan.php             @Rokkett2500
+/src/app/Console/Commands/BalapanAnak.php         @Rokkett2500
+/src/app/Balapan/                                 @Rokkett2500
+/src/app/Balapan/AlamatPertama.php                @ihsanpradipta45-alt
+/src/app/Balapan/RebutanStok.php                  @victor-isMe
+/src/app/Balapan/PenyesuaianStok.php              @victor-isMe
+/src/app/Balapan/KeranjangGanda.php               @mrdaknsh
+/src/app/Balapan/WebhookGanda.php                 @nabelazahra-ptr26
