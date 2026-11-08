@@ -67,4 +67,17 @@ final class PenerbitSesi
             $sesi->forceFill(['dicabut_pada' => now()])->save();
         }
     }
+
+    /**
+     * Mencabut seluruh sesi seorang pengguna di semua perangkat.
+     *
+     * @return int jumlah sesi yang dicabut
+     */
+    public function cabutSemua(Pengguna $pengguna): int
+    {
+        return Sesi::query()
+            ->berlaku()
+            ->where('pengguna_id', $pengguna->id)
+            ->update(['dicabut_pada' => now()]);
+    }
 }
