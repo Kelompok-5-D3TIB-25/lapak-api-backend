@@ -37,6 +37,12 @@ Route::middleware('auth:sesi')
             Route::patch('produk/{id}', [ProdukSayaController::class, 'update'])->name('produk.update');
             Route::delete('produk/{id}', [ProdukSayaController::class, 'destroy'])
                 ->name('produk.destroy');
+
+            // Mengubah stok: wajib Idempotency-Key (LP-11). "Tambah 5" yang diulang karena
+            // jaringan putus tidak boleh menjadi tambah 10.
+            Route::post('produk/{id}/stok', [ProdukSayaController::class, 'stok'])
+                ->middleware('idempoten')
+                ->name('produk.stok');
         });
     });
 

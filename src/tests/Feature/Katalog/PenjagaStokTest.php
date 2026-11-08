@@ -6,6 +6,7 @@ use App\Exceptions\ProdukTidakDapatDibeli;
 use App\Models\Produk;
 use App\Models\Toko;
 use App\Services\PenjagaStok;
+use Illuminate\Support\Facades\DB;
 
 beforeEach(function () {
     $this->penjaga = app(PenjagaStok::class);
@@ -67,4 +68,16 @@ it('sedangTampil() mengikuti syarat scopeTampil', function () {
     expect($this->kain->sedangTampil())->toBeTrue()
         ->and($dariTokoTutup->sedangTampil())->toBeFalse()
         ->and($arsip->sedangTampil())->toBeFalse();
+});
+
+it('menolak dipanggil di luar transaksi, karena kuncinya tidak akan bertahan', function () {
+    // Setiap uji berjalan di dalam transaksi milik RefreshDatabase. Transaksi itu ditutup dulu
+    // untuk meniru pemanggil yang lupa membuka DB::transaction(), lalu dibuka kembali.
+    DB::rollBack();
+
+    try {
+        expect(fn () => $this->penjaga->ambil([1]))->toThrow(LogicException::class);
+    } finally {
+        DB::beginTransaction();
+    }
 });
