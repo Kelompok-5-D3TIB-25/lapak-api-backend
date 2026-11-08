@@ -2,24 +2,24 @@
 
 - Integrator: @victor-isMe
 - Tag penutup: `sesi-2`
-- Status: berjalan
+- Status: selesai
 
 ## Papan unggahan
 
 | PR | Unggahan | Cabang | Penulis | Peninjau | Status |
 |---|---|---|---|---|---|
-| #13 | Pembuka | `sesi-2/pembuka-faiz` | @victor-isMe | @nabelazahra-ptr26 | - |
-| #14 | A1 | `sesi-2/kontrak-sesi-dipta` | @ihsanpradipta45-alt | @mrdaknsh | - |
-| #15 | A2 | `sesi-2/kontrak-guard-lintar` | @Rokkett2500 | @victor-isMe | - |
-| #16 | A3 | `sesi-2/kontrak-toko-faiz` | @victor-isMe | @nabelazahra-ptr26 | - |
-| #17 | A4 | `sesi-2/kontrak-keranjang-mirda` | @mrdaknsh | @Rokkett2500 | - |
-| #18 | A5 | `sesi-2/kontrak-dompet-bela` | @nabelazahra-ptr26 | @ihsanpradipta45-alt | - |
-| #19 | B1 | `sesi-2/masuk-dipta` | @ihsanpradipta45-alt | @mrdaknsh | - |
-| #20 | B2 | `sesi-2/gerbang-lintar` | @Rokkett2500 | @victor-isMe | - |
-| #21 | B3 | `sesi-2/toko-saya-faiz` | @victor-isMe | @nabelazahra-ptr26 | - |
-| #22 | B4 | `sesi-2/keranjang-mirda` | @mrdaknsh | @Rokkett2500 | - |
-| #23 | B5 | `sesi-2/mutasi-bela` | @nabelazahra-ptr26 | @ihsanpradipta45-alt | - |
-| #24 | Penutup | `sesi-2/penutup-faiz` | @victor-isMe | @mrdaknsh | - |
+| #13 | Pembuka | `sesi-2/pembuka-faiz` | @victor-isMe | @nabelazahra-ptr26 | Selesai |
+| #14 | A1 | `sesi-2/kontrak-sesi-dipta` | @ihsanpradipta45-alt | @mrdaknsh | Selesai |
+| #15 | A2 | `sesi-2/kontrak-guard-lintar` | @Rokkett2500 | @victor-isMe | Selesai |
+| #16 | A3 | `sesi-2/kontrak-toko-faiz` | @victor-isMe | @nabelazahra-ptr26 | Selesai |
+| #17 | A4 | `sesi-2/kontrak-keranjang-mirda` | @mrdaknsh | @Rokkett2500 | Selesai |
+| #18 | A5 | `sesi-2/kontrak-dompet-bela` | @nabelazahra-ptr26 | @ihsanpradipta45-alt | Selesai |
+| #19 | B1 | `sesi-2/masuk-dipta` | @ihsanpradipta45-alt | @mrdaknsh | Selesai |
+| #20 | B2 | `sesi-2/gerbang-lintar` | @Rokkett2500 | @victor-isMe | Selesai |
+| #21 | B3 | `sesi-2/toko-saya-faiz` | @victor-isMe | @nabelazahra-ptr26 | Selesai |
+| #22 | B4 | `sesi-2/keranjang-mirda` | @mrdaknsh | @Rokkett2500 | Selesai |
+| #23 | B5 | `sesi-2/mutasi-bela` | @nabelazahra-ptr26 | @ihsanpradipta45-alt | Selesai |
+| #24 | Penutup | `sesi-2/penutup-faiz` | @victor-isMe | @mrdaknsh | Selesai |
 
 ## Sasaran sesi
 
@@ -54,4 +54,7 @@ Sesi 1 memperkirakan "unggahan D5 selalu pertama" karena D5 biasanya menyiapkan 
 
 ## Catatan penutup
 
-*(diisi setelah PR #24 merged)*
+Sesi 2 selesai dengan 155 tes, 657 asersi, 25 rute, Pint lulus, dan `lapak:periksa-buku` seimbang (6 mutasi). 
+
+**Titipan untuk Mirda (Integrator Sesi 3):**
+Landasan identitas, session dengan kunci, toko, keranjang, dan dompet sudah kokoh dan teruji. Silakan lanjutkan Sesi 3 (Pesanan dan Checkout) dengan memanfaatkan guard `auth:sesi` dan `sesi.segar` yang tersedia.
