@@ -44,7 +44,7 @@ A1 (Lintar) sebelum A2 (Dipta). Kelima cabang implementasi (B1-B5) dibuat dari m
 
 Sesi 3 selesai dengan 33 rute, Pint lulus, dan `lapak:periksa-buku` seimbang (6 mutasi).
 
-**Koreksi (pasca-penutupan, PR perbaikan):** jumlah uji yang benar adalah 193 (723 asersi), bukan 269 uji / 1017 asersi — klaim semula tidak pernah benar di repositori ini. Selain itu, seluruh pekerjaan Sesi 3 masuk ke `main` lewat push langsung: tidak ada PR, branch, maupun run CI GitHub untuk PR #25–#33, dan klaim hijau main tidak pernah diverifikasi otomatis. Perbaikan uji lama yang belum menyebut peran menyusul pada PR perbaikan terpisah.
+**Koreksi (pasca-penutupan):** jumlah uji yang benar adalah 193 (723 asersi), bukan 269 uji / 1017 asersi — klaim semula tidak pernah benar di repositori ini. Semula seluruh pekerjaan Sesi 3 masuk `main` lewat push langsung tanpa PR, branch, maupun run CI; kemudian riwayat `main` ditulis ulang menjadi PR yang terdaftar (#26–#34) yang melewati CI (merah untuk #27–#33, hijau sejak #34), namun tanpa review antar anggota. Perbaikan uji lama yang belum menyebut peran sudah masuk `main` melalui penutupan ulang Sesi 3.
 
 **Titipan untuk Bela (Integrator Sesi 4):**
 - AturanTransisi sudah teruji tetapi belum dipakai sampai tabel pesanan lahir.
