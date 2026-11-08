@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Domain\Pesanan\StatusPesanan;
 use App\Enums\JenisDompet;
 use App\Models\Dompet;
 use App\Models\MutasiSaldo;
+use App\Models\Pesanan;
 use Illuminate\Console\Command;
 
 final class PeriksaBuku extends Command
 {
     protected $signature = 'lapak:periksa-buku';
 
-    protected $description = 'Memeriksa empat invarian buku besar (LP-13); kode keluar 1 bila dilanggar.';
+    protected $description = 'Memeriksa lima invarian buku besar; kode keluar 1 bila dilanggar.';
 
     public function handle(): int
     {
@@ -52,6 +54,19 @@ final class PeriksaBuku extends Command
 
             $saldo = number_format($dompet->saldo_rupiah, 0, ',', '.');
             $baris[] = [$dompet->kode, $dompet->jenis->value, $saldo];
+        }
+
+        // 5. Dana yang ditahan sama dengan nilai pesanan yang sudah dibayar dan belum selesai.
+        //    Invarian ini mengikat buku besar ke tabel pesanan: uang di escrow selalu dapat
+        //    ditunjuk pesanannya.
+        $menahanDana = [StatusPesanan::Dibayar, StatusPesanan::Dikemas, StatusPesanan::Dikirim];
+        $ditahan = (int) Pesanan::query()->whereIn('status', $menahanDana)->sum('total_rupiah');
+        $escrow = (int) Dompet::query()
+            ->where('kode', JenisDompet::Escrow->value)
+            ->value('saldo_rupiah');
+
+        if ($escrow !== $ditahan) {
+            $pelanggaran[] = "Saldo escrow {$escrow}, tetapi dana pesanan yang ditahan {$ditahan}.";
         }
 
         $this->table(['Dompet', 'Jenis', 'Saldo (Rp)'], $baris);
