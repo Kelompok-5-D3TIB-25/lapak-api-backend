@@ -54,3 +54,27 @@ it('menyembunyikan rincian galat tak terduga saat debug mati', function () {
         ->assertJsonPath('galat.rincian', null)
         ->assertDontSee('SQLSTATE');
 });
+
+it('melarang penyimpanan respons API di cache', function () {
+    $sehat = $this->getJson('/api/v1/health')->assertOk();
+    $ditolak = $this->getJson('/api/v1/saya')->assertUnauthorized();
+
+    expect($sehat->headers->get('Cache-Control'))->toContain('no-store')
+        ->and($ditolak->headers->get('Cache-Control'))->toContain('no-store');
+});
+
+it('menyertakan header baku pada 401 dan 429', function () {
+    $this->getJson('/api/v1/saya')->assertUnauthorized()->assertHeader('WWW-Authenticate', 'Bearer');
+
+    foreach (range(1, 5) as $ke) {
+        $this->postJson('/api/v1/masuk', ['surel' => 'x@lapak.test', 'kata_sandi' => "tebakan-{$ke}"]);
+    }
+
+    $keenam = ['surel' => 'x@lapak.test', 'kata_sandi' => 'tebakan-6'];
+
+    $respons = $this->postJson('/api/v1/masuk', $keenam)
+        ->assertTooManyRequests()
+        ->assertJsonPath('galat.kode', 'TERLALU_SERING');
+
+    expect((int) $respons->headers->get('Retry-After'))->toBeGreaterThan(0)->toBeLessThanOrEqual(60);
+});
