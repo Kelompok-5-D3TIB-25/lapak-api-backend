@@ -95,4 +95,33 @@ Sesi 4 selesai dengan 292 uji (1121 asersi) pada SQLite maupun MySQL, 9 skenario
 
 ## Rekap kontribusi
 
-Ditulis menyusul setelah tag `sesi-4` terpasang; keluaran `scripts/rekap-sesi.sh 4` ditempel di PR setelahnya.
+```
+== Commit per anggota (sesi-3..sesi-4, tanpa merge commit)
+     9	belazahra
+     7	Rokkett2500
+     7	mrdaknsh
+     6	Pradipta-ihsan-ariyanto
+     5	victor-isMe
+
+== Baris ditambah dan dihapus per anggota
+belazahra    +1231 -31
+mrdaknsh     +1576 -14
+Pradipta-ihsan-ariyanto +730 -6
+Rokkett2500  +1208 -8
+victor-isMe  +586 -4
+
+== PR yang masuk ke main
+   Merge pull request #49 from Kelompok-5-D3TIB-25/sesi-4/penutup-bela
+   Merge pull request #46 from Kelompok-5-D3TIB-25/sesi-4/balapan-ci-sekar
+   Merge pull request #48 from Kelompok-5-D3TIB-25/sesi-4/urutan-kunci-rani
+   Merge pull request #45 from Kelompok-5-D3TIB-25/sesi-4/webhook-dimas
+   Merge pull request #44 from Kelompok-5-D3TIB-25/sesi-4/kunci-stok-bagas
+   Merge pull request #43 from Kelompok-5-D3TIB-25/sesi-4/checkout-rani
+   Merge pull request #42 from Kelompok-5-D3TIB-25/sesi-4/alamat-dipta
+   Merge pull request #41 from Kelompok-5-D3TIB-25/sesi-4/kontrak-pembayaran-dimas
+   Merge pull request #40 from Kelompok-5-D3TIB-25/sesi-4/kontrak-pesanan-rani
+   Merge pull request #39 from Kelompok-5-D3TIB-25/sesi-4/kontrak-stok-bagas
+   Merge pull request #38 from Kelompok-5-D3TIB-25/sesi-4/kontrak-alamat-dipta
+   Merge pull request #37 from Kelompok-5-D3TIB-25/sesi-4/kontrak-idempoten-sekar
+   Merge pull request #36 from Kelompok-5-D3TIB-25/sesi-4/pembuka-bela
+```
