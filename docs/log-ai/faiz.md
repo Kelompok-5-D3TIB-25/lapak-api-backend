@@ -17,3 +17,9 @@
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
 | 2026-11-15 | RBAC, peran, izin, middleware, matriks | Asisten AI | php artisan test, pint --test |
+
+## Sesi 4
+
+| Tanggal | Bagian | Alat | Cara verifikasi |
+|---|---|---|---|
+| 2026-11-09 | A3 penjaga stok versi kontrak, B3 kunci baris stok dan penyesuaian selisih (rebutan-stok, penyesuaian-stok) | Asisten AI | php artisan lapak:balapan rebutan-stok dan penyesuaian-stok pada MySQL, pest pada SQLite dan MySQL, pint --test |

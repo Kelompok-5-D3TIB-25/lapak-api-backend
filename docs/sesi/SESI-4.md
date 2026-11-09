@@ -2,27 +2,27 @@
 
 - Integrator: @nabelazahra-ptr26
 - Tag penutup: `sesi-4`
-- Status: berjalan
+- Status: selesai
 
 ## Papan unggahan
 
 | PR | Unggahan | Cabang | Penulis | Peninjau | Status |
 |---|---|---|---|---|---|
-| #36 | Pembuka | `sesi-4/pembuka-bela` | @nabelazahra-ptr26 | @mrdaknsh | Draf |
-| #37 | A1 | `sesi-4/kontrak-idempoten-sekar` | @Rokkett2500 | @nabelazahra-ptr26 | Menunggu |
-| #38 | A2 | `sesi-4/kontrak-alamat-dipta` | @ihsanpradipta45-alt | @Rokkett2500 | Menunggu |
-| #39 | A3 | `sesi-4/kontrak-stok-bagas` | @victor-isMe | @Pradipta-ihsan-ariyanto | Menunggu |
-| #40 | A4 | `sesi-4/kontrak-pesanan-rani` | @mrdaknsh | @victor-isMe | Menunggu |
-| #41 | A5 | `sesi-4/kontrak-pembayaran-dimas` | @nabelazahra-ptr26 | @mrdaknsh | Menunggu |
-| #42 | B1 | `sesi-4/alamat-dipta` | @ihsanpradipta45-alt | @Rokkett2500 | Menunggu |
-| #43 | B2 | `sesi-4/checkout-rani` | @mrdaknsh | @victor-isMe | Menunggu |
-| #44 | B3 | `sesi-4/kunci-stok-bagas` | @victor-isMe | @Pradipta-ihsan-ariyanto | Menunggu |
-| #45 | B4 | `sesi-4/webhook-dimas` | @nabelazahra-ptr26 | @mrdaknsh | Menunggu |
-| #46 | B5 | `sesi-4/balapan-ci-sekar` | @Rokkett2500 | @nabelazahra-ptr26 | Menunggu |
-| #47 | P1 | `sesi-4/urutan-kunci-rani` | @mrdaknsh | @victor-isMe | Menunggu (temuan B5) |
-| #48 | Penutup | `sesi-4/penutup-bela` | @nabelazahra-ptr26 | @Rokkett2500 | Menunggu |
+| #36 | Pembuka | `sesi-4/pembuka-bela` | @nabelazahra-ptr26 | @mrdaknsh | Selesai |
+| #37 | A1 | `sesi-4/kontrak-idempoten-sekar` | @Rokkett2500 | @nabelazahra-ptr26 | Selesai |
+| #38 | A2 | `sesi-4/kontrak-alamat-dipta` | @ihsanpradipta45-alt | @Rokkett2500 | Selesai |
+| #39 | A3 | `sesi-4/kontrak-stok-bagas` | @victor-isMe | @Pradipta-ihsan-ariyanto | Selesai |
+| #40 | A4 | `sesi-4/kontrak-pesanan-rani` | @mrdaknsh | @victor-isMe | Selesai |
+| #41 | A5 | `sesi-4/kontrak-pembayaran-dimas` | @nabelazahra-ptr26 | @mrdaknsh | Selesai |
+| #42 | B1 | `sesi-4/alamat-dipta` | @ihsanpradipta45-alt | @Rokkett2500 | Selesai |
+| #43 | B2 | `sesi-4/checkout-rani` | @mrdaknsh | @victor-isMe | Selesai |
+| #44 | B3 | `sesi-4/kunci-stok-bagas` | @victor-isMe | @Pradipta-ihsan-ariyanto | Selesai |
+| #45 | B4 | `sesi-4/webhook-dimas` | @nabelazahra-ptr26 | @mrdaknsh | Selesai |
+| #46 | B5 | `sesi-4/balapan-ci-sekar` | @Rokkett2500 | @nabelazahra-ptr26 | Selesai |
+| #48 | P1 | `sesi-4/urutan-kunci-rani` | @mrdaknsh | @victor-isMe | Selesai |
+| #49 | Penutup | `sesi-4/penutup-bela` | @nabelazahra-ptr26 | @Rokkett2500 | Selesai |
 
-Nomor PR adalah perkiraan; GitHub memberi nomor saat PR dibuka. P1 (`sesi-4/urutan-kunci-rani`) di-merge sebelum B5 walau dibuka setelahnya: urutan dependency lebih penting daripada nomor PR.
+P1 (`sesi-4/urutan-kunci-rani`) di-merge sebelum B5 walau nomornya lebih besar: urutan dependency lebih penting daripada nomor PR. Koreksi SESI-3 terpisah di PR #35 (menunggu review).
 
 ## Sasaran sesi
 
@@ -73,3 +73,26 @@ Aturan menyertai: (1) kunci hanya diambil di dalam `DB::transaction()`; (2) kunc
 - `main` merah saat Sesi 4 dimulai (38 uji tanpa peran; klaim "269 uji" di SESI-3.md tidak pernah benar; Sesi 3 semula masuk lewat push langsung lalu ditulis ulang menjadi PR #26–#34 yang di-merge dalam keadaan CI merah tanpa review). Diperbaiki di PR #25 (ditutup tanpa merge, isinya diserap `main` saat penutupan ulang Sesi 3) dan PR #35 (koreksi dokumen, menunggu review). CI `main` hijau sejak #34.
 - Jumlah uji aktual saat Sesi 4 dibuka: 193 (723 asersi), bukan 269.
 - `lapak_uji` dan hak user `lapak` dibuat ulang sebagai persiapan pengujian MySQL.
+- Mesin pengembangan ini tidak sanggup melepas 8 proses serempak dalam jendela 250 ms (kalibrasi `serempak` gagal pada 8, lulus pada 6 setelah garis mulai dinaikkan menjadi `max(4.0, jumlah * 0.5)` detik). Skenario lain tidak terpengaruh karena anak-anak menunggu garis mulai yang sama.
+- Review PR #40 sempat tercatat atas nama Rokkett2500 alih-alih victor-isMe (shell yang menulis masih memegang sesi tinjau sebelumnya); Bagas menyetujui setelah perbaikan dan itu dicatat di PR #40.
+- GitHub hanya mengenal 24 PR sebelum Sesi 4 (seluruh PR #26–#34 Sesi 3 adalah rewrite yang dibuat ulang), sehingga penomoran PR Sesi 4 bergeser: pembuka #36 … penutup #49, bukan #34–#46 seperti pada dokumen awal.
+
+## Catatan penutup
+
+Sesi 4 selesai dengan 292 uji (1121 asersi) pada SQLite maupun MySQL, 9 skenario balapan lulus, `lapak:periksa-buku` seimbang (6 mutasi), 43 rute, Pint lolos, dan `kualitas-mysql` menjadi pemeriksaan wajib pada `main`.
+
+**Titipan untuk Lintar (Integrator Sesi 5):**
+
+1. Pembayaran yang tiba setelah tagihan kedaluwarsa masih **ditolak 409** (LP-10) padahal uangnya sudah diterima gerbang; pengembalian dananya adalah pekerjaan Sesi 5.
+2. Pintu penjual: konfirmasi terima, pembatalan oleh pembeli, dan pintu audit (persetujuan toko, perubahan peran, pelunasan, pembatalan otomatis) belum ada log auditnya — menyusul Sesi 5.
+3. Setiap rute POST baru **wajib** masuk `RuteIdempotenTest` (salah satu dari dua daftar); rute tulis tanpa kunci sesi menuntut tinjauan pemilik D5.
+4. Catatan `kunci_idempotensi` belum pernah dipangkas; pertimbangkan `lapak:pangkas-idempotensi` (Latihan 6 Sesi 4).
+5. Kerangka papan sesi sudah disalin menjadi `docs/sesi/SESI-5.md`; isi sasaran Sesi 5 sebelum dimulai.
+6. `LAPAK_GATEWAY_RAHASIA` pada `.env.example` (`rahasia-gerbang-untuk-latihan`) hanya untuk mesin pengembangan; di produksi, rahasia berasal dari gerbang dan tidak pernah masuk repositori.
+7. `kualitas-mysql` kini pemeriksaan wajib di samping `kualitas`; setiap PR harus hijau pada keduanya sebelum di-merge.
+
+**Temuan sesi ini (P1 / PR #48):** skenario lintas domain `batal-saat-checkout` menemukan kebuntuan (SQLSTATE 1213) antara pembelian (kunci `produk` urut nomor) dan pembatalan otomatis (pengembalian stok menurut urutan butir). Diperbaiki pemilik domain D3: seluruh pesanan ditandai lebih dulu, kuantitas dijumlah per produk, dan stok dikembalikan urut nomor menaik. Dibuktikan merah di sini dan hijau sesudah perbaikan; `RuteIdempotenTest` menjaga agar rute POST baru tetap terklasifikasi.
+
+## Rekap kontribusi
+
+Ditulis menyusul setelah tag `sesi-4` terpasang; keluaran `scripts/rekap-sesi.sh 4` ditempel di PR setelahnya.

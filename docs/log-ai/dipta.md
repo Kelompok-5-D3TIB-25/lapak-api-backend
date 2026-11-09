@@ -17,3 +17,9 @@
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
 | 2026-11-15 | RBAC, peran, izin, middleware, matriks | Asisten AI | php artisan test, pint --test |
+
+## Sesi 4
+
+| Tanggal | Bagian | Alat | Cara verifikasi |
+|---|---|---|---|
+| 2026-11-09 | A2 kontrak alamat dan penjaga transaksi (izin pesanan.buat, tabel alamat, potret alamat, PenjagaTransaksi, pembatas laju per sesi) | Asisten AI | php artisan migrate, pest pada SQLite dan MySQL, pint --test |

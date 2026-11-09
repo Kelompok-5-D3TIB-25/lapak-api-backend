@@ -17,3 +17,9 @@
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
 | 2026-11-15 | RBAC, peran, izin, middleware, matriks | Asisten AI | php artisan test, pint --test |
+
+## Sesi 4
+
+| Tanggal | Bagian | Alat | Cara verifikasi |
+|---|---|---|---|
+| 2026-11-09 | A1 kunci idempotensi dan alat lapak:balapan; B5 klasifikasi rute POST, skenario lintas domain, tugas CI kualitas-mysql | Asisten AI | php artisan lapak:balapan --semua pada MySQL, pest pada SQLite dan MySQL, pint --test, CI kualitas dan kualitas-mysql hijau |

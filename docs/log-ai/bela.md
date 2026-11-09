@@ -17,3 +17,9 @@
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
 | 2026-11-15 | RBAC, peran, izin, middleware, matriks | Asisten AI | php artisan test, pint --test |
+
+## Sesi 4
+
+| Tanggal | Bagian | Alat | Cara verifikasi |
+|---|---|---|---|
+| 2026-11-09 | A5 kontrak pembayaran (tabel, LayananPembayaran), B4 webhook bertanda tangan HMAC, dana escrow, simulasi gerbang, invarian kelima periksa-buku, pembuka dan penutup sesi | Asisten AI | php artisan lapak:balapan webhook-ganda pada MySQL, pest pada SQLite dan MySQL, lapak:periksa-buku |
