@@ -36,6 +36,12 @@ final class BukuBesar
         return $this->ambilAtauBuat('penjual:'.$penjual->id, JenisDompet::Penjual, $penjual->id);
     }
 
+    /** Hanya membaca. Dipakai pintu GET agar melihat saldo tidak pernah menulis ke basis data. */
+    public function cariDompetPenjual(Pengguna $penjual): ?Dompet
+    {
+        return Dompet::query()->where('kode', 'penjual:'.$penjual->id)->first();
+    }
+
     /**
      * @return string kelompok mutasi, untuk ditelusuri di kemudian hari
      */
