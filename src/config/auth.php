@@ -42,6 +42,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Guard API Lapak. Driver "sesi" didaftarkan di AppServiceProvider.
+        'sesi' => [
+            'driver' => 'sesi',
+            'provider' => 'users',
+        ],
     ],
 
     /*
